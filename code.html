@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
   <head>
-    <title>Rewind: A Coding Project By Derek Holland</title>
+    <title>TACO CAT: A Coding Project By Derek Holland</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
@@ -22,7 +22,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap"
       rel="stylesheet"
     />
     <!-- Font Awesome -->
@@ -41,8 +41,8 @@
     <nav class="navbar navbar-expand-md navbar-dark fixed-top">
       <div class="container-fluid">
         <img src="img/D-logo-1.svg" class="d-logo-nav" alt="" />
-        <a class="navbar-brand rewind" href="index.html"
-          ><span class="ms-2 text-rewind">REWIND</span></a
+        <a class="navbar-brand taco" href="index.html"
+          ><span class="ms-2 text-rewind">TACO CAT</span></a
         >
         <button
           class="navbar-toggler"
@@ -72,7 +72,7 @@
               <a
                 class="nav-link"
                 target="_blank"
-                href="https://github.com/derekholland/Rewind"
+                href="https://github.com/derekholland/taco-cat"
                 >Git Repo</a
               >
             </li>
@@ -86,40 +86,62 @@
     <!-- === Main Section === -->
     <main class="flex-shrink-0">
       <div class="container py-4 px-5 mt-5">
-        <h2 class="border-1 border-bottom border-dark">The Code for REWIND.</h2>
+        <h2 class="border-1 border-bottom border-dark">
+          The Code for TACO CAT.
+        </h2>
         <div class="row row-cols-1 row-cols-lg-2">
           <div class="col-lg-8">
             <pre class="line-numbers">
                   <code class="language-javascript">
                     
-                    // get the string from the page
-                    // Controller Function
+                    // get user input
                     function getValue() {
-                      // add invisible class to alert
+                      // make alert invisible
                       document.getElementById("alert").classList.add("invisible");
+                      // get user string from the page
                       let userString = document.getElementById("userString").value;
-                      let revString = reverseString(userString);
-                      displayString(revString);
-                    }
-                    //Reverse the string
-                    // logic Function
-                    function reverseString(userString) {
-                      let revString = [];
-                      // reverse a string
-                      for (let i = userString.length - 1; i >= 0; i--) {
-                        revString += userString[i];
-                      }
-                      return revString;
+                      // check for a palindrome
+                      let returnObj = checkForPalindrome(userString);
+                      // display our message to the screen
+                      displayMessage(returnObj);
                     }
                     
-                    // display the reversed string to the user
-                    // View Function
-                    function displayString(revString) {
-                      // write message to the page
+                    // check if string is a palindrome
+                    function checkForPalindrome(userString) {
+                      //convert to lowercase
+                      userString = userString.toLowerCase();
+                      // remove spaces and special characters
+                      // a-z 0-9
+                      let regex = /[^a-z0-9]/gi;
+                      // anything that is not a-z 0-9 gets replaced with an empty string
+                      userString = userString.replace(regex, "");
+                      let reversedString = [];
+                      let returnObj = {};
+                      // loop through the string backwards and add the reversed string to the revString array
+                      for (let i = userString.length - 1; i >= 0; i--) {
+                        reversedString += userString[i];
+                      }
+                      //check if userString equals revString
+                      if (userString === reversedString) {
+                        // set the msg property
+                        returnObj.msg = "Well done! You entered a Palindrome!";
+                      } else {
+                        returnObj.msg = "Sorry! You did not enter a palindrome!";
+                      }
+                      // set the reversed property of the returnObj object
+                      returnObj.reversed = reversedString;
+                      // return the object
+                      return returnObj;
+                    }
+                    
+                    function displayMessage(returnObj) {
+                      // Display the message
+                      document.getElementById("alertHeader").innerHTML = returnObj.msg;
+                      // Display the reversed string
                       document.getElementById(
                         "msg"
-                      ).innerHTML = `Your string reversed is : ${revString}`;
-                      // show the alert box
+                      ).innerHTML = `Your phrase reversed is ${returnObj.reversed}`;
+                      // remove the invisible display class to reveal the pop up
                       document.getElementById("alert").classList.remove("invisible");
                     }
                     
@@ -129,58 +151,73 @@
           </div>
           <div class="col-lg-4">
             <p>The code in structured into three functions.</p>
-            <h5><strong>getValue() Function</strong></h5>
+            <h5>The <strong>getValue()</strong> Function</h5>
             <p>
-              This is the main controller function that calls the other
-              functions in the program. This function is an event the "Reverse
-              Me" button listens for. In the HTML document of this page there is
-              an event listener attached to the "Reverse Me" button. After the
-              user enters a string in the input box and presses the "Reverse Me"
-              button, the
-              <strong>getValue()</strong>function is called.This functions
-              accepts no arguments. The function starts by adding a CSS class to
-              the div element with an alert id. Adding this class hides the
-              element from the user. Next, the
-              <strong>userString</strong> variable is created. This variable
-              stores the value of the string the user inputs. Another variable
-              named <strong>revString</strong> is created. This variable calls
-              the <strong>reverseString()</strong> function and stores the
-              returned value of that function. Now that we have the reversed
-              String we can pass that to the
-              <strong>displayString()</strong> function to show the reversed
-              string to the user.
+              This function accepts no arguments. First the "alert" id is
+              targeted with <strong>document.getElementById</strong> and the CSS
+              class "invisible" is added to the element. This class disables the
+              visibility of the element and this action will be reversed when
+              the <strong>displayMessage()</strong> function is called. Next we
+              get the string the user typed in by targeting the "userString" id
+              and grabbing the value property. This value is then saved to the
+              <strong>userString</strong> variable. Now that we have the input
+              value saved to a variable we can pass that variable to the
+              <strong>checkForPalindrome()</strong> function. This function will
+              return a data object and that data object will be saved to the
+              <strong>returnObj</strong> variable. Finally, the
+              <strong>displayMessage()</strong> function is called with the
+              <strong>returnObj</strong> passed in. This final step will run the
+              function that outputs the results of the program to the screen.
             </p>
-
-            <h5>The <strong>reverseString()</strong> Function.</h5>
-
+            <h5>The <strong>checkForPalindrome()</strong> Function</h5>
             <p>
-              This function starts by assigning an empty array to the
-              <strong>revString</strong> variable. This array wil be used to
-              store the reversed string. A for loop runs next to reverse the
-              string. This happens by setting the index of the for loop to the
-              last index of the string in <strong>userString</strong>. Now the
-              loop will decrement down all the way to zero and store the current
-              character of <strong>userString</strong> into the
-              <strong>revString</strong> array on each iteration. This is how
-              the the empty array becomes a copy of the string but in reverse
-              order. The final step of the function returns the reversed string
-              that was just created. Now back in the
-              <strong>getValue()</strong> function this value is stored in the
-              revString variable.
+              Using the <strong>toLowerCase()</strong> method the
+              <strong>userString</strong> is converted to all lower case
+              characters. This allows us to compare both the string and the
+              reversed string later to determine if they are equal. Next a
+              regular expression is created and assigned to the variable
+              <strong>regex</strong> This regular expression is used to remove
+              any spaces or special characters which is important for accurately
+              comparing strings. Next using the <strong>replace</strong> method
+              anything that is not a-z or 0-9 will be replaced with an empty
+              string.
             </p>
-
-            <h5>The <strong>displayString()</strong> Function</h5>
             <p>
-              This function displays the reversed string to the user. By using
-              <strong>document.getElementById()</strong> we can target the
-              element with the "msg" id and set the inner HTML to the message we
-              want to display. Inside of the template literal the variable
-              <strong>revString</strong> is used to show the final reversed
-              string. To make all of this appear on the page we have to remove
-              the CSS class called invisible. This can be accomplished by
-              targeting the element with the alert class and removing the
-              invisible class from the class list. Now the user can see the
-              reversed string!
+              Next the variable <strong>reversedString</strong> is created and
+              assigned an empty array. This array will be used to store the
+              string we reverse in the for loop. Another variable is created and
+              assigned an empty object. Now using a for loop we run through
+              userString in reversed order and add the letters of the string on
+              each iteration. This fills the empty array created earlier with a
+              reversed version of the user string. Now we can check if the user
+              string is a palindrome. Using an if statement we check if
+              <strong>userString</strong> equals
+              <strong>reversedString</strong>. If they are equal then we have
+              found a palindrome. For a match we set the msg property of the
+              <strong>returnObj</strong> object to a message telling the user
+              the word is a palindrome. If no match the msg property is set to a
+              message that reflects this. We exit the if code block and set the
+              reversed property of the <strong>returnObj</strong> object to the
+              <strong>reversedString</strong> variable. This will be used to
+              show the user the reversed word in the
+              <strong>displayMessage()</strong> function.
+            </p>
+            <h5>The <strong>displayMessage()</strong> Function</h5>
+            <p>
+              The function takes the <strong>returnObj</strong> object as an
+              argument and displays the msg and reversedString properties in the
+              form of a message to the user on the screen. To do this we set the
+              inner HTML of the element with the "alertHeader" id to the msg
+              property of the <strong>returnObj</strong> object. Next we do the
+              same thing except target the element with the "msg" class. The
+              inner HTML for this element is set to a template string with the
+              <strong>reversed</strong> property nested. The template string
+              tells the user what the string reversed is. Finally, to get this
+              message to show up on the screen we have to remove the invisible
+              class that was previously set in the
+              <strong>getValue()</strong> function by grabbing the element with
+              the alert id and remving the "invisible" class from the classList.
+              Now the results of the palindrome check are showing on the screen!
             </p>
           </div>
         </div>
